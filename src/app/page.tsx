@@ -250,7 +250,7 @@ export default async function HomePage() {
           </p>
           <p>
             বাজারভেদে দাম পরিবর্তিত হতে পারে। কেনার আগে স্থানীয় বাজারে যাচাই
-            করুন।
+            করুন ।
           </p>
         </div>
       </footer>
