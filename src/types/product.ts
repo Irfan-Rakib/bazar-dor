@@ -1,22 +1,35 @@
+export type MarketPrice = {
+  market: string;
+  division: string;
+  min: number;
+  max: number;
+};
+
+export type PriceChange = {
+  dir: "up" | "down" | "flat";
+  pct: number;
+};
+
 export type Product = {
-  id: string;
-  name: string;
+  id: number;
   slug: string;
+  nameBn: string;
   category: string;
-  categoryName: string;
+  categoryNameBn: string;
+  categoryIcon: string;
   unit: string;
-  price: number;
-  minPrice: number;
-  maxPrice: number;
-  averagePrice: number;
-  changePercentage: number;
-  emoji: string;
-  description: string;
+  image: string;
+  today: number;
+  yesterday: number;
+  lastWeek: number;
+  lastMonth: number;
+  change: PriceChange;
+  markets: MarketPrice[];
 };
 
 export type Category = {
   id: string;
-  name: string;
   slug: string;
-  emoji: string;
+  nameBn: string;
+  icon: string;
 };

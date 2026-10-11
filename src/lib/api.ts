@@ -1,55 +1,42 @@
 import type { Category, Product } from "@/types/product";
 
-const API_URL = "https://openapi.programming-hero.com/api/bazardor";
+const API_BASE_URL = "https://openapi.programming-hero.com/api/bazardor";
 
-async function fetchJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
-    next: { revalidate: 300 },
+async function fetchApi<T>(endpoint: string): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    cache: "no-store",
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    throw new Error(
+      `API request failed: ${response.status} ${response.statusText}`,
+    );
   }
 
-  return response.json() as Promise<T>;
-}
-
-export async function getProducts(): Promise<Product[]> {
-  const response = await fetchJson<unknown>("/products");
-
-  // We will map the actual API response to Product
-  // after verifying its field names.
-  if (Array.isArray(response)) {
-    return response as Product[];
-  }
-
-  if (
-    response &&
-    typeof response === "object" &&
-    "data" in response &&
-    Array.isArray(response.data)
-  ) {
-    return response.data as Product[];
-  }
-
-  throw new Error("Unexpected products API response format");
+  return (await response.json()) as T;
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const response = await fetchJson<unknown>("/categories");
+  return fetchApi<Category[]>("/categories");
+}
 
-  if (Array.isArray(response)) {
-    return response as Category[];
-  }
+export async function getCategory(slug: string): Promise<Category> {
+  return fetchApi<Category>(`/categories/${encodeURIComponent(slug)}`);
+}
 
-  if (
-    response &&
-    typeof response === "object" &&
-    "data" in response &&
-    Array.isArray(response.data)
-  ) {
-    return response.data as Category[];
-  }
+export async function getProducts(category?: string): Promise<Product[]> {
+  const query = category ? `?category=${encodeURIComponent(category)}` : "";
 
-  throw new Error("Unexpected categories API response format");
+  return fetchApi<Product[]>(`/products${query}`);
+}
+
+export async function getProduct(id: number | string): Promise<Product> {
+  return fetchApi<Product>(`/products/${encodeURIComponent(String(id))}`);
+}
+
+export function getProductBySlug(
+  products: Product[],
+  slug: string,
+): Product | undefined {
+  return products.find((product) => product.slug === slug);
 }
