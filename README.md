@@ -22,7 +22,7 @@
 
 ## 🌐 Live Demo
 
-> 🔗 **Live URL:** _Add your deployed link here_
+> 🔗 **Live URL:** [Click Here](https://bazar-dor-s255.vercel.app/)
 
 ## ✨ Features
 
