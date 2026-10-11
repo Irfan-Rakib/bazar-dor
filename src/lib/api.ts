@@ -2,18 +2,41 @@ import type { Category, Product } from "@/types/product";
 
 const API_BASE_URL = "https://openapi.programming-hero.com/api/bazardor";
 
+const REQUEST_TIMEOUT = 10000;
+
 async function fetchApi<T>(endpoint: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    cache: "no-store",
-  });
+  const controller = new AbortController();
 
-  if (!response.ok) {
-    throw new Error(
-      `API request failed: ${response.status} ${response.statusText}`,
-    );
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, REQUEST_TIMEOUT);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      cache: "no-store",
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `API request failed: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    return (await response.json()) as T;
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error("API request timed out. Please try again.");
+    }
+
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error("Something went wrong while fetching API data.");
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return (await response.json()) as T;
 }
 
 export async function getCategories(): Promise<Category[]> {

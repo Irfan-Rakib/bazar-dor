@@ -1,3 +1,8 @@
+export type PriceChange = {
+  dir: "up" | "down" | "flat";
+  pct: number;
+};
+
 export type MarketPrice = {
   market: string;
   division: string;
@@ -5,9 +10,11 @@ export type MarketPrice = {
   max: number;
 };
 
-export type PriceChange = {
-  dir: "up" | "down" | "flat";
-  pct: number;
+export type Category = {
+  id: string;
+  slug: string;
+  nameBn: string;
+  icon: string;
 };
 
 export type Product = {
@@ -25,11 +32,4 @@ export type Product = {
   lastMonth: number;
   change: PriceChange;
   markets: MarketPrice[];
-};
-
-export type Category = {
-  id: string;
-  slug: string;
-  nameBn: string;
-  icon: string;
 };
