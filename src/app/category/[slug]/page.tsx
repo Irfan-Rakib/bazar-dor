@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ShoppingBasket } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { getCategories, getProducts } from "@/lib/api";
-import ProductCard from "@/components/products/ProductCard";
+import ProductSort from "@/components/products/ProductSort";
 
 export const instant = false;
 
@@ -63,39 +63,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             এই ক্যাটাগরির পণ্যের বর্তমান দাম ও বাজারের তথ্য এক জায়গায় দেখুন।
           </p>
         </div>
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">
-              {category.nameBn} এর পণ্য
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
-              মোট {categoryProducts.length}টি পণ্য
-            </p>
-          </div>
+        <div className="mt-8">
+          <h2 className="mb-5 text-xl font-bold text-gray-900">
+            {category.nameBn} এর পণ্য
+          </h2>
+
+          <ProductSort products={categoryProducts} />
         </div>
-        {categoryProducts.length > 0 ? (
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {categoryProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-8 rounded-3xl border border-dashed border-gray-300 bg-white px-6 py-14 text-center">
-            <ShoppingBasket size={42} className="mx-auto text-emerald-800" />
-            <h3 className="mt-4 text-xl font-bold text-gray-900">
-              এই ক্যাটাগরিতে এখনো পণ্য পাওয়া যায়নি
-            </h3>
-            <p className="mt-2 text-sm text-gray-500">
-              অন্য ক্যাটাগরির পণ্য দেখে নিতে পারো।
-            </p>
-            <Link
-              href="/"
-              className="mt-6 inline-flex rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900"
-            >
-              সব পণ্য দেখুন
-            </Link>
-          </div>
-        )}
       </section>
     </main>
   );
