@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
+import Navbar from "@/components/layout/NavBar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,8 +16,8 @@ export default function RootLayout({
   return (
     <html lang="bn">
       <body className="min-h-screen bg-[#f8faf5] text-gray-900 antialiased">
+        <Navbar />
         {children}
-
         <Toaster
           position="top-center"
           toastOptions={{
